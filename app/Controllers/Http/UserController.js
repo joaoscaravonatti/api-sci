@@ -48,7 +48,11 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async show({ params, request, response }) {}
+  async show({ params, response }) {
+    const user = await User.find(params.id);
+    user.role = await user.role().fetch();
+    return response.json(user);
+  }
 
   /**
    * Update user details.
