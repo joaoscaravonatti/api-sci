@@ -16,10 +16,4 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-// Route.post("/people", "PersonController.store");
-// Route.get("/people", "PersonController.index");
-// Route.delete("/people/:id", "PersonController.destroy");
-// Route.get("/people/:id", "PersonController.show");
-// Route.put("/people/:id", "PersonController.update");
-
-Route.resource("people", "PersonController").apiOnly();
+Route.resource("users", "UserController").apiOnly();
