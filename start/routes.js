@@ -22,4 +22,8 @@ Route.resource("workshops", "WorkshopController").apiOnly();
 
 Route.group(() => {
   Route.post("/users", "WorkshopController.subscribeUser");
+  Route.delete(
+    ":idWorkshop/users/:idUser",
+    "WorkshopController.unsubscribeUser"
+  );
 }).prefix("workshops");

@@ -11,12 +11,16 @@ class UsersWorkshopsSchema extends Schema {
         .integer("user_id")
         .unsigned()
         .references("id")
-        .inTable("users");
+        .inTable("users")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       table
         .integer("workshop_id")
         .unsigned()
         .references("id")
-        .inTable("workshops");
+        .inTable("workshops")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       table.timestamps();
     });
   }

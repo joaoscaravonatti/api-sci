@@ -72,7 +72,10 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params, request, response }) {
+    const user = await User.findOrFail(params.id);
+    return response.json({ success: await user.delete() });
+  }
 }
 
 module.exports = UserController;

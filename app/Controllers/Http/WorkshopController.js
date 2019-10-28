@@ -48,7 +48,7 @@ class WorkshopController {
    */
   async show({ params, response }) {
     const workshop = await Workshop.find(params.id);
-    workshop.users = await workshop.users().fetch();
+    await workshop.load("users");
 
     return response.json(workshop);
   }
@@ -71,7 +71,10 @@ class WorkshopController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params, request, response }) {
+    const workshop = await Workshop.findOrFail(params.id);
+    return response.json(await workshop.delete());
+  }
 
   /**
    * Subscribe user to a workshop
@@ -91,6 +94,23 @@ class WorkshopController {
     await workshop.users().save(user);
 
     return response.json(true);
+  }
+
+  /**
+   * Unsubscribe user from a workshop
+   * DELETE workshops/:idWorkshop/users/:idUser
+   *
+   * @param {object} ctx
+   * @param {Response} ctx.response
+   */
+  async unsubscribeUser({ params, response }) {
+    const workshopId = params.idWorkshop;
+    const userId = params.idUser;
+
+    const user = await User.findOrFail(userId);
+    const workshop = await Workshop.findOrFail(workshopId);
+
+    return response.json(await workshop.users().detach([user.id]));
   }
 }
 
