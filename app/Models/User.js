@@ -42,6 +42,12 @@ class User extends Model {
     return this.hasMany("App/Models/Token");
   }
 
+  workshops() {
+    return this.belongsToMany("App/Models/Workshop").pivotTable(
+      "users_workshops"
+    );
+  }
+
   role() {
     return this.belongsTo("App/Models/Role");
   }
