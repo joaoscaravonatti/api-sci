@@ -7,6 +7,9 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Workshop = use("App/Models/Workshop");
 
+/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+const User = use("App/Models/User");
+
 /**
  * Resourceful controller for interacting with workshops
  */
@@ -44,7 +47,10 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async show({ params, response }) {
-    return response.json(await Workshop.find(params.id));
+    const workshop = await Workshop.find(params.id);
+    workshop.users = await workshop.users().fetch();
+
+    return response.json(workshop);
   }
 
   /**
@@ -66,6 +72,26 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async destroy({ params, request, response }) {}
+
+  /**
+   * Subscribe user to a workshop
+   * POST workshops/:id/users/
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async subscribeUser({ request, response }) {
+    const workshopId = request.body.workshopId;
+    const userId = request.body.userId;
+
+    const workshop = await Workshop.find(workshopId);
+    const user = await User.find(userId);
+
+    await workshop.users().save(user);
+
+    return response.json(true);
+  }
 }
 
 module.exports = WorkshopController;

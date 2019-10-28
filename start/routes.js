@@ -17,4 +17,9 @@
 const Route = use("Route");
 
 Route.resource("users", "UserController").apiOnly();
+
 Route.resource("workshops", "WorkshopController").apiOnly();
+
+Route.group(() => {
+  Route.post("/users", "WorkshopController.subscribeUser");
+}).prefix("workshops");
