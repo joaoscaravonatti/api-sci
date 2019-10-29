@@ -22,6 +22,8 @@ Route.resource("users", "UserController")
 
 Route.resource("workshops", "WorkshopController").apiOnly();
 
+Route.get("/roles", "RoleController.index");
+
 Route.group(() => {
   Route.post("/users", "WorkshopController.subscribeUser");
   Route.delete(
