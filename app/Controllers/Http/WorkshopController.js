@@ -34,8 +34,12 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const workshop = await Workshop.create(request.all());
-    return response.json(workshop);
+    try {
+      const workshop = await Workshop.create(request.all());
+      return response.json(workshop);
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -47,10 +51,14 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async show({ params, response }) {
-    const workshop = await Workshop.find(params.id);
-    await workshop.load("users");
+    try {
+      const workshop = await Workshop.find(params.id);
+      await workshop.load("users");
 
-    return response.json(workshop);
+      return response.json(workshop);
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -61,7 +69,15 @@ class WorkshopController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    try {
+      const workshop = await Workshop.findOrFail(params.id);
+      workshop.merge(request.all());
+      return response.json({ success: await workshop.save() });
+    } catch (error) {
+      return response.json(error);
+    }
+  }
 
   /**
    * Delete a workshop with id.
@@ -72,8 +88,12 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async destroy({ params, request, response }) {
-    const workshop = await Workshop.findOrFail(params.id);
-    return response.json(await workshop.delete());
+    try {
+      const workshop = await Workshop.findOrFail(params.id);
+      return response.json({ success: await workshop.delete() });
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -85,15 +105,19 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async subscribeUser({ request, response }) {
-    const workshopId = request.body.workshopId;
-    const userId = request.body.userId;
+    try {
+      const workshopId = request.body.workshopId;
+      const userId = request.body.userId;
 
-    const workshop = await Workshop.find(workshopId);
-    const user = await User.find(userId);
+      const workshop = await Workshop.find(workshopId);
+      const user = await User.find(userId);
 
-    await workshop.users().save(user);
+      await workshop.users().save(user);
 
-    return response.json(true);
+      return response.json(true);
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -104,13 +128,17 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async unsubscribeUser({ params, response }) {
-    const workshopId = params.idWorkshop;
-    const userId = params.idUser;
+    try {
+      const workshopId = params.idWorkshop;
+      const userId = params.idUser;
 
-    const user = await User.findOrFail(userId);
-    const workshop = await Workshop.findOrFail(workshopId);
+      const user = await User.findOrFail(userId);
+      const workshop = await Workshop.findOrFail(workshopId);
 
-    return response.json(await workshop.users().detach([user.id]));
+      return response.json(await workshop.users().detach([user.id]));
+    } catch (error) {
+      return response.json(error);
+    }
   }
 }
 

@@ -35,9 +35,12 @@ class UserController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const user = await User.create(request.all());
-
-    return response.json(user);
+    try {
+      const user = await User.create(request.all());
+      return response.json(user);
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -49,9 +52,13 @@ class UserController {
    * @param {Response} ctx.response
    */
   async show({ params, response }) {
-    const user = await User.find(params.id);
-    user.role = await user.role().fetch();
-    return response.json(user);
+    try {
+      const user = await User.find(params.id);
+      await user.load("role");
+      return response.json(user);
+    } catch (error) {
+      return response.json(error);
+    }
   }
 
   /**
@@ -62,7 +69,15 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    try {
+      const user = await User.findOrFail(params.id);
+      user.merge(request.all());
+      return response.json({ success: await user.save() });
+    } catch (error) {
+      return response.json(error);
+    }
+  }
 
   /**
    * Delete a user with id.
@@ -73,8 +88,12 @@ class UserController {
    * @param {Response} ctx.response
    */
   async destroy({ params, request, response }) {
-    const user = await User.findOrFail(params.id);
-    return response.json({ success: await user.delete() });
+    try {
+      const user = await User.findOrFail(params.id);
+      return response.json({ success: await user.delete() });
+    } catch (error) {
+      return response.json(error);
+    }
   }
 }
 

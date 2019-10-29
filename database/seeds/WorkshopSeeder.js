@@ -19,13 +19,17 @@ class WorkshopSeeder {
   async run() {
     await Workshop.createMany([
       {
-        name: "Curso React",
-        date: "2019-10-20 13:30:00",
-        description: "Integração de React com API Rest"
+        title: "Curso ReactJS",
+        place: "D08",
+        startDate: "2019-10-20 13:30:00",
+        endDate: "2019-10-20 13:30:00",
+        description: "Integração de ReactJS com API Rest"
       },
       {
-        name: "Curso Adonis",
-        date: "2019-10-20 13:30:00",
+        title: "Curso AdonisJS",
+        place: "D08",
+        startDate: "2019-10-20 13:30:00",
+        endDate: "2019-10-20 13:30:00",
         description: "API Rest com AdonisJS"
       }
     ]);

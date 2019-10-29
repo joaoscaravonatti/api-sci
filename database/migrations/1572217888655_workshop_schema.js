@@ -7,9 +7,11 @@ class WorkshopSchema extends Schema {
   up() {
     this.create("workshops", table => {
       table.increments();
-      table.string("name", 255);
-      table.datetime("date");
+      table.string("title", 255);
       table.string("description", 255);
+      table.string("place", 255);
+      table.datetime("startDate");
+      table.datetime("endDate");
       table.timestamps();
     });
   }

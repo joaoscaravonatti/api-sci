@@ -16,7 +16,9 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-Route.resource("users", "UserController").apiOnly();
+Route.resource("users", "UserController")
+  .apiOnly()
+  .middleware("auth");
 
 Route.resource("workshops", "WorkshopController").apiOnly();
 
@@ -27,3 +29,5 @@ Route.group(() => {
     "WorkshopController.unsubscribeUser"
   );
 }).prefix("workshops");
+
+Route.post("/login", "AuthController.login");
