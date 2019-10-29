@@ -17,7 +17,7 @@ class AuthController {
   async login({ auth, request, response }) {
     const { email, password } = request.all();
     const token = await auth.attempt(email, password);
-    return response.json({ token });
+    return response.json(token);
   }
 
   /**
@@ -29,6 +29,22 @@ class AuthController {
    */
   async logout({ auth }) {
     await auth.logout();
+  }
+
+  /**
+   * Check if JWT Token is valid
+   * GET check
+   *
+   * @param {object} ctx
+   * @param {Auth} ctx.auth
+   * @param {Response} ctx.response
+   */
+  async check({ auth, response }) {
+    try {
+      return response.json(await auth.check());
+    } catch (error) {
+      return response.json(false);
+    }
   }
 }
 

@@ -31,3 +31,4 @@ Route.group(() => {
 }).prefix("workshops");
 
 Route.post("/login", "AuthController.login");
+Route.get("/check", "AuthController.check");
