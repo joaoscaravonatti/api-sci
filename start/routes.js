@@ -16,9 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-Route.resource("users", "UserController")
-  .apiOnly()
-  .middleware("auth");
+Route.resource("users", "UserController").apiOnly();
 
 Route.resource("workshops", "WorkshopController").apiOnly();
 
