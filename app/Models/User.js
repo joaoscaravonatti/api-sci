@@ -43,9 +43,7 @@ class User extends Model {
   }
 
   workshops() {
-    return this.belongsToMany("App/Models/Workshop").pivotTable(
-      "users_workshops"
-    );
+    return this.belongsToMany("App/Models/Workshop");
   }
 
   role() {

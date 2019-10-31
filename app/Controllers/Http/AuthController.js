@@ -7,7 +7,7 @@
 class AuthController {
   /**
    * Login
-   * POST login
+   * POST /login
    *
    * @param {object} ctx
    * @param {Auth} ctx.auth
@@ -16,24 +16,14 @@ class AuthController {
    */
   async login({ auth, request, response }) {
     const { email, password } = request.all();
+
     const token = await auth.attempt(email, password);
     return response.json(token);
   }
 
   /**
-   * Logout
-   * POST logout
-   *
-   * @param {object} ctx
-   * @param {Auth} ctx.auth
-   */
-  async logout({ auth }) {
-    await auth.logout();
-  }
-
-  /**
    * Check if JWT Token is valid
-   * GET check
+   * GET /check
    *
    * @param {object} ctx
    * @param {Auth} ctx.auth

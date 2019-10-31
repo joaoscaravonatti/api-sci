@@ -18,17 +18,17 @@ const Route = use("Route");
 
 Route.resource("users", "UserController").apiOnly();
 
-Route.resource("workshops", "WorkshopController").apiOnly();
+Route.resource("workshops", "WorkshopController")
+  .apiOnly()
+  .middleware(["auth"]);
 
 Route.get("/roles", "RoleController.index");
 
 Route.group(() => {
-  Route.post("/users", "WorkshopController.subscribeUser");
-  Route.delete(
-    ":idWorkshop/users/:idUser",
-    "WorkshopController.unsubscribeUser"
-  );
-}).prefix("workshops");
+  Route.post("/subscribe", "SubscriptionController.subscribe");
+  Route.post("/unsubscribe", "SubscriptionController.unsubscribe");
+  Route.get("/subscriptions", "SubscriptionController.getSubscriptions");
+}).middleware(["auth"]);
 
 Route.post("/login", "AuthController.login");
 Route.get("/check", "AuthController.check");

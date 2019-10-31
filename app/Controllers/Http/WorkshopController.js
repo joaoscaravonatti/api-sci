@@ -2,13 +2,10 @@
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+/** @typedef {import('@adonisjs/auth/src/Auth')} Auth */
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Workshop = use("App/Models/Workshop");
-
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const User = use("App/Models/User");
 
 /**
  * Resourceful controller for interacting with workshops
@@ -22,7 +19,11 @@ class WorkshopController {
    * @param {Response} ctx.response
    */
   async index({ response }) {
-    return response.json(await Workshop.all());
+    return response.json(
+      await Workshop.query()
+        .with("users")
+        .fetch()
+    );
   }
 
   /**
@@ -73,6 +74,7 @@ class WorkshopController {
     try {
       const workshop = await Workshop.findOrFail(params.id);
       workshop.merge(request.all());
+
       return response.json({ success: await workshop.save() });
     } catch (error) {
       return response.json(error);
@@ -90,52 +92,8 @@ class WorkshopController {
   async destroy({ params, request, response }) {
     try {
       const workshop = await Workshop.findOrFail(params.id);
+
       return response.json({ success: await workshop.delete() });
-    } catch (error) {
-      return response.json(error);
-    }
-  }
-
-  /**
-   * Subscribe user to a workshop
-   * POST workshops/:id/users/
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async subscribeUser({ request, response }) {
-    try {
-      const workshopId = request.body.workshopId;
-      const userId = request.body.userId;
-
-      const workshop = await Workshop.find(workshopId);
-      const user = await User.find(userId);
-
-      await workshop.users().save(user);
-
-      return response.json(true);
-    } catch (error) {
-      return response.json(error);
-    }
-  }
-
-  /**
-   * Unsubscribe user from a workshop
-   * DELETE workshops/:idWorkshop/users/:idUser
-   *
-   * @param {object} ctx
-   * @param {Response} ctx.response
-   */
-  async unsubscribeUser({ params, response }) {
-    try {
-      const workshopId = params.idWorkshop;
-      const userId = params.idUser;
-
-      const user = await User.findOrFail(userId);
-      const workshop = await Workshop.findOrFail(workshopId);
-
-      return response.json(await workshop.users().detach([user.id]));
     } catch (error) {
       return response.json(error);
     }
