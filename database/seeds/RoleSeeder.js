@@ -20,10 +20,10 @@ class RoleSeeder {
   async run() {
     const roles = [
       {
-        name: "Teacher"
+        name: "Mediador"
       },
       {
-        name: "Student"
+        name: "Inscrito"
       }
     ];
 
