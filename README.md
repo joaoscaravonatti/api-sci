@@ -18,7 +18,6 @@ adonis new yardstick --api-only
 
 or manually clone the repo and then run `npm install`.
 
-
 ### Migrations
 
 Run the following command to run startup migrations.
@@ -26,3 +25,7 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+### Sobre o projeto
+
+Projeto realizado para a semana da Ciência da Computação, tendo o objetivo de fazer o cadastro dos alunos participantes e o controle dos conteúdos.
